@@ -210,7 +210,7 @@ void mousePressed(){
                 
         case SLOT_BOMB:
          showSlot(mouseCol,mouseRow, SLOT_DEAD);
-         //gameState = GAME_LOSE;
+         gameState = GAME_LOSE;
          break;
          
         case SLOT_OFF:
