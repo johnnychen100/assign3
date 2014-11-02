@@ -67,7 +67,10 @@ void draw(){
           break;
     case GAME_RUN:
           //---------------- put you code here ----
-
+          if(clickCount == totalSlots-bombCount){
+            gameState = GAME_WIN;
+          }
+          //println(clickCount);
           // -----------------------------------
           break;
     case GAME_WIN:
@@ -85,7 +88,21 @@ void draw(){
 
 int countNeighborBombs(int col,int row){
   // -------------- Requirement B ---------
-  return 0;
+   int count = 0;
+  int k = -1;
+  int j = -1;
+    
+  for(k = -1 ; k < 2 ; k++){
+   for(j = -1 ; j < 2 ; j++){
+    
+    if(col+k >= 0 && col+k < nSlot && row+j >= 0 && row+j < nSlot){
+     if(slot[col+k][row+j] == SLOT_BOMB){
+      count++;
+     }
+    }
+   }
+  }
+  return count;
 }
 
 void setBombs(){
@@ -97,7 +114,17 @@ void setBombs(){
   }
   // -------------- put your code here ---------
   // randomly set bombs
-
+   for(int i=0; i < bombCount; i++){
+    int col=int(random(4));
+    int row=int(random(4));
+    
+    if(slot[col][row] == SLOT_BOMB){
+     i--; 
+    } else {
+     slot[col][row] = SLOT_BOMB; 
+    }
+  }
+  //println(bombCount);
   // ---------------------------------------
 }
 
@@ -174,7 +201,30 @@ void mousePressed(){
        mouseY >= iy && mouseY <= iy+sideLength){
     
     // --------------- put you code here -------     
-
+    
+    int mouseCol = int((mouseX-ix)/SLOT_SIZE);
+    int mouseRow = int((mouseY-iy)/SLOT_SIZE);
+    
+    if(mouseButton == LEFT) {
+      switch(slot[mouseCol][mouseRow]){
+                
+        case SLOT_BOMB:
+         showSlot(mouseCol,mouseRow, SLOT_DEAD);
+         //gameState = GAME_LOSE;
+         break;
+         
+        case SLOT_OFF:
+         slot[mouseCol][mouseRow] = SLOT_SAFE;
+         showSlot(mouseCol,mouseRow, SLOT_SAFE);
+         clickCount++;
+         break;
+                
+      }
+    } /*else if(mouseButton == RIGHT && slot[mouseCol][mouseRow] != SLOT_SAFE) {
+      if(slot[mouseCol][mouseRow] == SLOT_OFF){
+        flagSlot[mouseCol][mouseRow] = true;
+      }
+    }*/
     // -------------------------
     
   }
